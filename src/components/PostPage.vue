@@ -1,25 +1,31 @@
 <template>
   <div>
-    <PostDetails
+    <PostItem
+      class="mb-5"
       v-bind:post="post"
     />
     <h3>Комментарии:</h3>
-    <PostComment
-      v-for="comment in comments"
-      :key="comment.id"
-      :comment="comment"
-    />
+    <CommentForm v-bind:post="id" />
+    <div v-if="comments.length" class="my-5">
+      <CommentItem
+        v-for="comment in comments"
+        :key="comment.id"
+        :comment="comment"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import PostDetails from './PostDetails';
-import PostComment from './PostComment';
+import PostItem from './PostItem';
+import CommentItem from './CommentItem';
+import CommentForm from './CommentForm';
 
 export default {
   components: {
-    PostDetails,
-    PostComment,
+    PostItem,
+    CommentItem,
+    CommentForm,
   },
   name: 'PostPage',
   props: {
@@ -35,8 +41,7 @@ export default {
     },
     comments () {
       const { getCommentsByPost } = this.$store.getters;
-      const { comments } = this.post;
-      return getCommentsByPost(comments);
+      return getCommentsByPost(this.id);
     },
   },
 };

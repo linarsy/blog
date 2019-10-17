@@ -1,24 +1,17 @@
 <template>
   <div>
-    <b>{{user.name}}</b>
+    <b>{{comment.author}}</b>
     <p class="mb-1">{{comment.text}}</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'PostComment',
+  name: 'CommentItem',
   props: {
     comment: {
       type: Object,
       required: true,
-    },
-  },
-  computed: {
-    user () {
-      const  { getUserById } = this.$store.getters;
-      const  { author } = this.comment;
-      return getUserById(author);
     },
   },
 };

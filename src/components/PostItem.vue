@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'PostDetails',
+  name: 'PostItem',
   props: {
     post: {
       type: Object,

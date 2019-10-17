@@ -10,7 +10,6 @@ export default new Vuex.Store({
   state: {
     posts,
     comments,
-    users,
   },
   getters: {
     postsById: state => state.posts.byId,
@@ -25,16 +24,36 @@ export default new Vuex.Store({
     },
     commentsById: state => state.comments.byId,
     commentsIds: state => state.comments.allIds,
-    getCommentsByPost: (state, getters) => ids => {
+    comments: (state, getters) => {
       const { commentsById, commentsIds } = getters;
-      return intersection(ids, commentsIds).map(id => commentsById[id]);
+      return commentsIds.map(id => commentsById[id]);
     },
-    usersById: state => state.users.byId,
-    getUserById: (state, getters) => id => {
-      const { usersById } = getters;
-      return usersById[id];
+    getCommentsByPost: (state, getters) => id => {
+      const { comments } = getters;
+      return comments.filter(({ post }) => post === id);
     },
   },
-  mutations: {},
+  mutations: {
+    addMessage (state, attributes) {
+      const { posts: { byId, allIds } } = state;
+      const time = +new Date();
+      attributes = { ...attributes, id: `post${time}` };
+      return state.posts = {
+        ...state.posts,
+        byId: { ...byId, [attributes.id]: attributes },
+        allIds: [...allIds, attributes.id],
+      };
+    },
+    addComment (state, attributes) {
+      const { comments: { byId, allIds } } = state;
+      const time = +new Date();
+      attributes = { ...attributes, id: `comment${time}` };
+      return state.comments = {
+        ...state.comments,
+        byId: { ...byId, [attributes.id]: attributes },
+        allIds: [...allIds, attributes.id],
+      };
+    },
+  },
   actions: {}
 });

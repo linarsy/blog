@@ -3,7 +3,7 @@
     <div class="mb-3">
       <h5 class="mb-1">{{ post.title }}</h5>
       <p class="mb-1">{{ post.description }}</p>
-      <small> комментарии: {{ post.comments.length }}</small>
+      <small> комментарии: {{ comments.length }}</small>
     </div>
   </router-link>
 </template>
@@ -15,6 +15,12 @@ export default {
     post: {
       type: Object,
       required: true,
+    },
+  },
+  computed: {
+    comments () {
+      const { getCommentsByPost } = this.$store.getters;
+      return getCommentsByPost(this.post.id);
     },
   },
 };

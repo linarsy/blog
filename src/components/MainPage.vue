@@ -7,20 +7,22 @@
         :post="post"
       />
     </ul>
-    <p v-else>
-      Начните вести блог.
-    </p>
+    <div class="col-8">
+      <PostForm />
+    </div>
   </div>
 </template>
 
 <script>
 import PostPreview from './PostPreview';
+import PostForm from './PostForm';
 
 export default {
   components: {
     PostPreview,
+    PostForm,
   },
-  name: 'PreviewPage',
+  name: 'MainPage',
   computed: {
     posts () {
       const { postsInReverse } = this.$store.getters;

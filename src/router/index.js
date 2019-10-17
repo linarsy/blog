@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import PreviewPage from '@/components/PreviewPage';
+import MainPage from '@/components/MainPage';
 import PostPage from '@/components/PostPage';
 
 Vue.use(Router);
@@ -11,7 +11,7 @@ export default new Router({
     {
       path: '/',
       name:"default",
-      component: PreviewPage,
+      component: MainPage,
     },
     {
       path: '/post/:id',

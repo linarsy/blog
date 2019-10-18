@@ -22,7 +22,7 @@ export default {
     },
   },
   methods: {
-    deleteComment (e) {
+    deleteComment () {
       this.$store.commit('deleteComment', this.comment.id)
     },
   },

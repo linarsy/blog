@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     editPost () {
-      this.mode = 'edit'
+      this.mode = 'edit';
     },
     deletePost () {
       this.$store.commit('deletePost', this.post.id);

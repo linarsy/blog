@@ -34,7 +34,7 @@ export default {
     post: {
       type: String,
       required: true,
-    }
+    },
   },
   data () {
     return {

@@ -1,5 +1,5 @@
 <template>
-  <form v-on:submit.prevent="addComment">
+  <form @submit.prevent="addComment">
     <div class="form-group">
       <label for="author">Представьтесь</label>
       <input
@@ -7,6 +7,7 @@
         class="form-control"
         id="author"
         name="author"
+        required
         v-model="author"
       >
     </div>
@@ -17,16 +18,16 @@
         id="text"
         name="text"
         rows="3"
+        required
         v-model="text"
         >
       </textarea>
     </div>
-    <button type="submit">Сохранить</button>
+    <button type="submit" class="btn btn-info">Сохранить</button>
   </form>
 </template>
 
 <script>
-
 export default {
   name: 'PostForm',
   props: {
@@ -44,7 +45,11 @@ export default {
   methods: {
     addComment (e) {
       const formData = new FormData(e.target);
-      let attributes = { post: this.post};
+      const time = +new Date();
+      let attributes = {
+        post: this.post,
+        id: `comment${time}`,
+      };
       for(const pair of formData.entries()) {
         const [key, value] = pair;
         attributes = { ...attributes, [key]: value };

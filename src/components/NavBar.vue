@@ -2,7 +2,7 @@
   <nav class="navbar navbar-dark bg-info sticky-top">
     <div class="container">
       <router-link to="/">
-        <span class="navbar-brand font-weight-bold">SimpleBlog</span>
+        <span class="navbar-brand font-weight-bold">Personal Blog</span>
       </router-link>
     </div>
   </nav>

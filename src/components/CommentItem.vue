@@ -1,7 +1,14 @@
 <template>
-  <div>
+  <div class="mb-3">
     <b>{{comment.author}}</b>
-    <p class="mb-1">{{comment.text}}</p>
+    <p class="mb-3">{{comment.text}}</p>
+    <button
+      type="button"
+      class="btn btn-info"
+      @click="deleteComment"
+    >
+      Удалить
+    </button>
   </div>
 </template>
 
@@ -12,6 +19,11 @@ export default {
     comment: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    deleteComment (e) {
+      this.$store.commit('deleteComment', this.comment.id)
     },
   },
 };

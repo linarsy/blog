@@ -12,14 +12,7 @@ const getComments = () => {
   return data.comments;
 };
 
-const getUsers = () => {
-  const users = JSON.parse(localStorage.getItem('user'));
-  if (users) return users;
-  return data.users;
-};
-
 export default {
   posts: getPosts(),
   comments: getComments(),
-  users: getUsers(),
 };

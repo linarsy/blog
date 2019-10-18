@@ -1,5 +1,5 @@
 <template>
-  <form v-on:submit.prevent="addPost">
+  <form @submit.prevent="$emit('save', $event.target)">
     <div class="form-group">
       <label for="title">Заголовок</label>
       <input
@@ -7,7 +7,8 @@
         class="form-control"
         id="title"
         name="title"
-        v-model="title"
+        required
+        v-model="post.title"
       >
     </div>
     <div class="form-group">
@@ -17,7 +18,8 @@
         class="form-control"
         id="description"
         name="description"
-        v-model="description"
+        required
+        v-model="post.description"
       >
     </div>
     <div class="form-group">
@@ -26,12 +28,13 @@
         class="form-control"
         id="text"
         name="body"
-        rows="3"
-        v-model="text"
+        rows="5"
+        required
+        v-model="post.body"
         >
       </textarea>
     </div>
-    <button type="submit">Сохранить</button>
+    <button type="submit" class="btn btn-info">Сохранить</button>
   </form>
 </template>
 
@@ -39,23 +42,18 @@
 
 export default {
   name: 'PostForm',
-  data () {
-    return {
-      title: '',
-      description: '',
-      text: '',
-    }
-  },
-  methods: {
-    addPost (e) {
-      const formData = new FormData(e.target);
-      let attributes = {};
-      for(const pair of formData.entries()) {
-        const [key, value] = pair;
-        attributes = { ...attributes, [key]: value };
+  props: {
+    post: {
+      type: Object,
+      required: false,
+      default () {
+        return {
+          id : "",
+          title : "",
+          description: "",
+          body : "",
+        }
       }
-      this.$store.commit('addMessage', attributes)
-      e.target.reset();
     },
   },
 };

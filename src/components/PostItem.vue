@@ -1,8 +1,21 @@
 <template>
-  <div class="mb-3">
-    <h5 class="mb-1">{{ post.title }}</h5>
-    <b class="mb-1">{{ post.description }}</b>
+  <div>
+    <h3 class="mb-4">{{ post.title }}</h3>
     <p> {{ post.body }}</p>
+    <button
+      type="button"
+      class="btn btn-info"
+      @click="$emit('edit')"
+    >
+      Редактировать
+    </button>
+    <button
+      type="button"
+      class="btn btn-info ml-3"
+      @click="$emit('delete')"
+    >
+      Удалить
+    </button>
   </div>
 </template>
 

@@ -1,11 +1,12 @@
 {
-  "name": "route",
+  "name": "linarsy-blog",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "npm run build && surge dist"
   },
   "dependencies": {
     "bootstrap": "^4.3.1",

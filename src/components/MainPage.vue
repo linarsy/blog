@@ -29,7 +29,7 @@
       <div v-if="posts.length">
         <p>Страница {{count}} из {{lastPage}}</p>
         <PostPreview
-          v-for="post in selectedPosts"
+          v-for="post in postsByPage"
           :key="post.id"
           :post="post"
         />
@@ -40,35 +40,30 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations } from 'vuex';
 import PostPreview from './PostPreview';
-
-const itemsByPage = 3;
 
 export default {
   components: {
     PostPreview,
   },
   name: 'MainPage',
-  data () {
-    return {
-      count: 1,
-    }
-  },
   computed: {
-    posts () {
-      const { posts } = this.$store.getters;
-      return posts;
-    },
-    selectedPosts () {
-      const { getPostByPage } = this.$store.getters;
-      return getPostByPage(this.count - 1, itemsByPage);
-    },
-    lastPage () {
-      const lastPage = this.posts.length / itemsByPage;
-      return Math.ceil(lastPage);
-    },
+    ...mapState([
+      'count',
+    ]),
+    ...mapGetters([
+      'posts',
+      'lastPage',
+      'postsByPage',
+    ]),
   },
   methods: {
+    ...mapMutations({
+      nextPage: 'increment',
+      previousPage: 'decrement',
+      add: 'createPost',
+    }),
     createPost (form) {
       const formData = new FormData(form);
       const time = +new Date();
@@ -77,14 +72,8 @@ export default {
         const [key, value] = pair;
         attributes = { ...attributes, [key]: value };
       }
-      this.$store.commit('createPost', attributes);
+      this.add(attributes);
       form.reset();
-    },
-    previousPage () {
-      this.count = this.count - 1;
-    },
-    nextPage () {
-      this.count = this.count + 1;
     },
   },
 };

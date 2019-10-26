@@ -3,12 +3,14 @@
     <div class="mb-3">
       <h5 class="mb-1">{{ post.title }}</h5>
       <p class="mb-1">{{ post.description }}</p>
-      <small> комментарии: {{ comments.length }}</small>
+      <small> комментарии: {{ commentsByPost.length }}</small>
     </div>
   </router-link>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'PostPreview',
   props: {
@@ -18,9 +20,11 @@ export default {
     },
   },
   computed: {
-    comments () {
-      const { getCommentsByPost } = this.$store.getters;
-      return getCommentsByPost(this.post.id);
+    ...mapGetters([
+      'comments',
+    ]),
+    commentsByPost () {
+      return this.comments.filter(({ post }) => post === this.post.id);
     },
   },
 };

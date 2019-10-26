@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 export default {
   name: 'PostForm',
   props: {
@@ -43,6 +45,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      add: 'addComment',
+    }),
     addComment (e) {
       const formData = new FormData(e.target);
       const time = +new Date();
@@ -54,7 +59,7 @@ export default {
         const [key, value] = pair;
         attributes = { ...attributes, [key]: value };
       }
-      this.$store.commit('addComment', attributes)
+      this.add(attributes);
       e.target.reset();
     },
   },

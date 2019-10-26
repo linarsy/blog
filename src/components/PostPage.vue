@@ -16,9 +16,9 @@
     <div class="mt-5">
       <h4 class="mb-3">Комментарии:</h4>
       <CommentForm :post="id" />
-      <div v-if="comments.length" class="my-5">
+      <div v-if="commentsByPost.length" class="my-5">
         <CommentItem
-          v-for="comment in comments"
+          v-for="comment in commentsByPost"
           :key="comment.id"
           :comment="comment"
         />
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import PostItem from './PostItem';
 import PostForm from './PostForm';
 import CommentItem from './CommentItem';
@@ -53,13 +54,15 @@ export default {
     },
   },
   computed: {
+    ...mapGetters([
+      'postsById',
+      'comments',
+    ]),
     post () {
-      const { getPostById } = this.$store.getters;
-      return getPostById(this.id);
+      return this.postsById[this.id];
     },
-    comments () {
-      const { getCommentsByPost } = this.$store.getters;
-      return getCommentsByPost(this.id);
+    commentsByPost () {
+      return this.comments.filter(({ post }) => post === this.post.id);
     },
   },
   methods: {

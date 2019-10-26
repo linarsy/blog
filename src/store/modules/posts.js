@@ -1,17 +1,9 @@
-import Vue from "vue";
-import Vuex from "vuex";
 import omit from 'lodash/omit';
 import without from 'lodash/without';
-import initData from '../initData';
-
-Vue.use(Vuex);
-const { posts, comments } = initData;
+import { posts } from '../../initData';
 
 const state = {
   posts,
-  comments,
-  itemsByPage: 3,
-  count: 1,
 };
 
 const getters = {
@@ -20,11 +12,6 @@ const getters = {
   posts: (state, getters) => {
     const { postsById, postsIds } = getters;
     return postsIds.map(id => postsById[id]).reverse();
-  },
-  lastPage: (state, getters) => {
-    const { itemsByPage } = state;
-    const { posts } = getters;
-    return Math.ceil(posts.length / itemsByPage);
   },
   postsByPage: (state, getters) => {
     const { itemsByPage, count } = state;
@@ -35,16 +22,6 @@ const getters = {
   getPostById: (state, getters) => id => {
     const { postsById } = getters;
     return postsById[id];
-  },
-  commentsById: state => state.comments.byId,
-  commentsIds: state => state.comments.allIds,
-  comments: (state, getters) => {
-    const { commentsById, commentsIds } = getters;
-    return commentsIds.map(id => commentsById[id]);
-  },
-  getCommentsByPost: (state, getters) => id => {
-    const { comments } = getters;
-    return comments.filter(({ post }) => post === id);
   },
 };
 
@@ -75,36 +52,14 @@ const mutations = {
     };
     localStorage.setItem('post', JSON.stringify(state.posts));
   },
-  addComment (state, attributes) {
-    const { comments: { byId, allIds } } = state;
-    state.comments = {
-      ...state.comments,
-      byId: { ...byId, [attributes.id]: attributes },
-      allIds: [...allIds, attributes.id],
-    };
-    localStorage.setItem('comment', JSON.stringify(state.comments));
-  },
-  deleteComment (state, id) {
-    const { comments: { byId, allIds } } = state;
-    state.comments = {
-      byId: omit(byId, id),
-      allIds: without(allIds, id),
-    };
-    localStorage.setItem('comment', JSON.stringify(state.comments));
-  },
-  increment (state) {
-    state.count++
-  },
-  decrement (state) {
-    state.count--
-  }
 };
 
 const actions = {};
 
-export default new Vuex.Store({
+export default {
+  namespaced: true,
   state,
   getters,
   actions,
   mutations,
-});
+};

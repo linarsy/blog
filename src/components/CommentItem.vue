@@ -5,7 +5,7 @@
     <button
       type="button"
       class="btn btn-info"
-      @click="deleteComment"
+      @click="deleteComment(comment.id)"
     >
       Удалить
     </button>
@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 export default {
   name: 'CommentItem',
   props: {
@@ -22,9 +24,9 @@ export default {
     },
   },
   methods: {
-    deleteComment () {
-      this.$store.commit('deleteComment', this.comment.id)
-    },
+    ...mapMutations([
+      'deleteComment',
+    ]),
   },
 };
 </script>

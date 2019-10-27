@@ -3,18 +3,18 @@ import without from 'lodash/without';
 import { posts } from '../../initData';
 
 const state = {
-  posts,
+  items: posts,
 };
 
 const getters = {
-  postsById: state => state.posts.byId,
-  postsIds: state => state.posts.allIds,
+  postsById: state => state.items.byId,
+  postsIds: state => state.items.allIds,
   posts: (state, getters) => {
     const { postsById, postsIds } = getters;
     return postsIds.map(id => postsById[id]).reverse();
   },
-  postsByPage: (state, getters) => {
-    const { itemsByPage, count } = state;
+  postsByPage: (state, getters, rootState) => {
+    const { page: { itemsByPage, count } } = rootState;
     const { posts } = getters;
     const index = count - 1;
     return posts.slice(index * itemsByPage, index * itemsByPage + itemsByPage);
@@ -27,34 +27,56 @@ const getters = {
 
 const mutations = {
   createPost (state, attributes) {
-    const { posts: { byId, allIds } } = state;
-    state.posts = {
-      ...state.posts,
+    const { items: { byId, allIds } } = state;
+    state.items = {
+      ...state.items,
       byId: { ...byId, [attributes.id]: attributes },
       allIds: [...allIds, attributes.id],
     };
-    localStorage.setItem('post', JSON.stringify(state.posts));
+    localStorage.setItem('post', JSON.stringify(state.items));
   },
   editPost (state, attributes) {
-    const { posts: { byId, allIds } } = state;
-    state.posts = {
-      ...state.posts,
+    const { items: { byId, allIds } } = state;
+    state.items = {
+      ...state.items,
       byId: { ...byId, [attributes.id]: attributes },
       allIds,
     };
-    localStorage.setItem('post', JSON.stringify(state.posts));
+    localStorage.setItem('post', JSON.stringify(state.items));
   },
   deletePost (state, id) {
-    const { posts: { byId, allIds } } = state;
-    state.posts = {
+    const { items: { byId, allIds } } = state;
+    state.items = {
       byId: omit(byId, id),
       allIds: without(allIds, id),
     };
-    localStorage.setItem('post', JSON.stringify(state.posts));
+    localStorage.setItem('post', JSON.stringify(state.items));
   },
 };
 
-const actions = {};
+const actions = {
+  createPost ({ commit }, formData) {
+    const time = new Date();
+    const attributes = {
+      id: `post${+time}`,
+      time,
+    };
+    for(const key of formData.keys()) {
+      attributes[key] = formData.get(key);
+    }
+    commit('createPost', attributes);
+  },
+  editPost ({ commit }, formData) {
+    const time = new Date();
+    const attributes = {
+      time,
+    };
+    for(const key of formData.keys()) {
+      attributes[key] = formData.get(key);
+    }
+    commit('editPost', attributes);
+  },
+};
 
 export default {
   namespaced: true,

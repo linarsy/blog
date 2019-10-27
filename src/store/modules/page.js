@@ -4,10 +4,10 @@ const state = {
 };
 
 const getters = {
-  lastPage: (state, getters) => {
+  lastPage: (state, getters, rootState, rootGetters) => {
     const { itemsByPage } = state;
-    const { posts } = getters;
-    return Math.ceil(posts.length / itemsByPage);
+    const postsIds = rootGetters['posts/postsIds'];
+    return Math.ceil(postsIds.length / itemsByPage);
   },
 };
 

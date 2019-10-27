@@ -26,7 +26,7 @@
     </button>
     <div class="mt-5">
       <h3 class="mb-4">Последние записи</h3>
-      <div v-if="posts.length">
+      <div v-if="postsIds.length">
         <p>Страница {{count}} из {{lastPage}}</p>
         <PostPreview
           v-for="post in postsByPage"
@@ -49,32 +49,22 @@ export default {
   },
   name: 'MainPage',
   computed: {
-    ...mapState([
+    ...mapState('page', [
       'count',
     ]),
-    ...mapGetters([
-      'posts',
+    ...mapGetters('page', [
       'lastPage',
+    ]),
+    ...mapGetters('posts', [
+      'postsIds',
       'postsByPage',
     ]),
   },
   methods: {
-    ...mapMutations({
+    ...mapMutations('page', {
       nextPage: 'increment',
       previousPage: 'decrement',
-      add: 'createPost',
     }),
-    createPost (form) {
-      const formData = new FormData(form);
-      const time = +new Date();
-      let attributes = { id: `post${time}` };
-      for(const pair of formData.entries()) {
-        const [key, value] = pair;
-        attributes = { ...attributes, [key]: value };
-      }
-      this.add(attributes);
-      form.reset();
-    },
   },
 };
 </script>

@@ -3,12 +3,12 @@ import without from 'lodash/without';
 import { comments } from '../../initData';
 
 const state = {
-  comments,
+  items: comments,
 };
 
 const getters = {
-  commentsById: state => state.comments.byId,
-  commentsIds: state => state.comments.allIds,
+  commentsById: state => state.items.byId,
+  commentsIds: state => state.items.allIds,
   comments: (state, getters) => {
     const { commentsById, commentsIds } = getters;
     return commentsIds.map(id => commentsById[id]);
@@ -21,25 +21,37 @@ const getters = {
 
 const mutations = {
   addComment (state, attributes) {
-    const { comments: { byId, allIds } } = state;
-    state.comments = {
-      ...state.comments,
+    const { items: { byId, allIds } } = state;
+    state.items = {
+      ...state.items,
       byId: { ...byId, [attributes.id]: attributes },
       allIds: [...allIds, attributes.id],
     };
-    localStorage.setItem('comment', JSON.stringify(state.comments));
+    localStorage.setItem('comment', JSON.stringify(state.items));
   },
   deleteComment (state, id) {
-    const { comments: { byId, allIds } } = state;
-    state.comments = {
+    const { items: { byId, allIds } } = state;
+    state.items = {
       byId: omit(byId, id),
       allIds: without(allIds, id),
     };
-    localStorage.setItem('comment', JSON.stringify(state.comments));
+    localStorage.setItem('comment', JSON.stringify(state.items));
   },
 };
 
-const actions = {};
+const actions = {
+  addComment ({ commit }, formData) {
+    const time = new Date();
+    const attributes = {
+      id: `comment${+time}`,
+      time,
+    };
+    for(const key of formData.keys()) {
+      attributes[key] = formData.get(key);
+    }
+    commit('addComment', attributes);
+  },
+};
 
 export default {
   namespaced: true,

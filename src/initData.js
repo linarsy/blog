@@ -12,7 +12,5 @@ const getComments = () => {
   return data.comments;
 };
 
-export default {
-  posts: getPosts(),
-  comments: getComments(),
-};
+export const posts = getPosts();
+export const comments = getComments();

@@ -5,7 +5,7 @@
     <button
       type="button"
       class="btn btn-info"
-      @click="deleteComment(comment.id)"
+      @click="deleteComment"
     >
       Удалить
     </button>
@@ -24,9 +24,12 @@ export default {
     },
   },
   methods: {
-    ...mapMutations([
-      'deleteComment',
-    ]),
+    ...mapMutations('comments', {
+      delete: 'deleteComment',
+    }),
+    deleteComment () {
+      this.delete(this.comment.id);
+    }
   },
 };
 </script>

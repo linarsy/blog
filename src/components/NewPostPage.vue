@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import PostForm from './PostForm';
 
 export default {
@@ -14,15 +15,12 @@ export default {
   },
   name: 'NewPostPage',
   methods: {
+    ...mapActions('posts', {
+      save: 'createPost',
+    }),
     createPost (form) {
       const formData = new FormData(form);
-      const time = +new Date();
-      let attributes = { id: `post${time}` };
-      for(const pair of formData.entries()) {
-        const [key, value] = pair;
-        attributes = { ...attributes, [key]: value };
-      }
-      this.$store.commit('createPost', attributes);
+      this.save(formData);
       this.$router.push({ path: '/' });
     },
   },

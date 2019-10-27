@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 import PostItem from './PostItem';
 import PostForm from './PostForm';
 import CommentItem from './CommentItem';
@@ -54,33 +54,38 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
-      'postsById',
+    ...mapGetters('posts', [
+      'getPostById',
+    ]),
+    ...mapGetters('comments', [
       'comments',
+      'getCommentsByPost',
     ]),
     post () {
-      return this.postsById[this.id];
+      return this.getPostById(this.id);
     },
     commentsByPost () {
-      return this.comments.filter(({ post }) => post === this.post.id);
+      return this.getCommentsByPost(this.id);
     },
   },
   methods: {
+    ...mapMutations('posts', {
+      delete: 'deletePost',
+    }),
+    ...mapActions('posts', {
+      save: 'editPost',
+    }),
     editPost () {
       this.mode = 'edit';
     },
     deletePost () {
-      this.$store.commit('deletePost', this.post.id);
+      this.delete(this.id);
       this.$router.push({ path: '/' });
     },
     savePost (form) {
       const formData = new FormData(form);
-      let attributes = { id: this.id };
-      for(const pair of formData.entries()) {
-        const [key, value] = pair;
-        attributes = { ...attributes, [key]: value };
-      }
-      this.$store.commit('editPost', attributes);
+      formData.append('id', this.id);
+      this.save(formData);
       this.mode = 'read';
     },
   },

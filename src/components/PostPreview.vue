@@ -20,11 +20,11 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
-      'comments',
+    ...mapGetters('comments', [
+      'getCommentsByPost',
     ]),
     commentsByPost () {
-      return this.comments.filter(({ post }) => post === this.post.id);
+      return this.getCommentsByPost(this.post.id);
     },
   },
 };

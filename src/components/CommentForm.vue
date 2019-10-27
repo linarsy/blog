@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'PostForm',
@@ -45,21 +45,13 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({
-      add: 'addComment',
+    ...mapActions('comments', {
+      save: 'addComment',
     }),
     addComment (e) {
       const formData = new FormData(e.target);
-      const time = +new Date();
-      let attributes = {
-        post: this.post,
-        id: `comment${time}`,
-      };
-      for(const pair of formData.entries()) {
-        const [key, value] = pair;
-        attributes = { ...attributes, [key]: value };
-      }
-      this.add(attributes);
+      formData.append('post', this.post);
+      this.save(formData);
       e.target.reset();
     },
   },
